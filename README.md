@@ -312,7 +312,7 @@ zoxide can be installed in 4 easy steps:
    > ```python
    > execx($(zoxide init xonsh), 'exec', __xonsh__.ctx, filename='zoxide')
    > ```
-
+   >
    > Interactive completions require the `prompt_toolkit` shell. Type a keyword
    > followed by a space and Tab to select a path, then press Enter to navigate.
    > These completions support standalone commands with literal keywords;
