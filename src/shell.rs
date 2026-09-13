@@ -323,9 +323,11 @@ mod tests {
     fn xonsh_completion(#[case] cmd: Option<&str>) {
         let opts = Opts { cmd, hook: InitHook::None, echo: false, resolve_symlinks: false };
         let source = Xonsh(&opts).render().unwrap();
+        // Parse the Python fixture with Python rather than Xonsh's hybrid parser.
+        let test = format!("exec({:?})", include_str!("../tests/xonsh.py"));
 
         Command::new("xonsh")
-            .args(["--no-rc", "-c", include_str!("../tests/xonsh.py")])
+            .args(["--no-rc", "-c", &test])
             .write_stdin(source)
             .assert()
             .success()

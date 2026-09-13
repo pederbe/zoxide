@@ -234,9 +234,12 @@ if "__zoxide_keybindings" not in globals():
         """Keep native Tab completion, and use fzf after a keyword and a space."""
         # These dependencies are only needed by the prompt_toolkit shell.
         # pylint: disable=import-outside-toplevel
-        from prompt_toolkit.application import get_app, run_in_terminal
-        from prompt_toolkit.document import Document
-        from prompt_toolkit.filters import (
+        from prompt_toolkit.application import (  # type: ignore[import-not-found, unused-ignore] # pylint:disable=import-error
+            get_app,
+            run_in_terminal,
+        )
+        from prompt_toolkit.document import Document  # type: ignore[import-not-found, unused-ignore] # pylint:disable=import-error
+        from prompt_toolkit.filters import (  # type: ignore[import-not-found, unused-ignore] # pylint:disable=import-error
             Condition,
             emacs_insert_mode,
             has_completions,
@@ -249,7 +252,6 @@ if "__zoxide_keybindings" not in globals():
         parser = CompletionContextParser()
         pending = False
 
-        @Condition
         def enabled() -> bool:
             document = get_app().current_buffer.document
             return (
@@ -301,9 +303,9 @@ if "__zoxide_keybindings" not in globals():
 
             run_in_terminal(select)
 
-        bindings.add("c-i", filter=enabled & (emacs_insert_mode | vi_insert_mode))(
-            complete
-        )
+        bindings.add(
+            "c-i", filter=Condition(enabled) & (emacs_insert_mode | vi_insert_mode)
+        )(complete)
 
 
 {{ section }}

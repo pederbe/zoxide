@@ -47,6 +47,7 @@ async def check(late):
         if late:
             events.on_ptk_create.fire(bindings=bindings)
         exec(source, namespace)
+        handler = namespace["__zoxide_keybindings"]
         original_names = set(aliases)
         assert len(original_names) in (0, 2)
         if not late:
@@ -54,7 +55,7 @@ async def check(late):
         exec(source, namespace)
         assert set(aliases) == original_names
         assert len(bindings.bindings) == 1
-        assert len(events.on_ptk_create) == 1
+        assert namespace["__zoxide_keybindings"] is handler
         # A manually assigned alias also enables completion with --no-cmd.
         aliases["jump"] = namespace["__zoxide_z"]
         aliases["go"] = namespace["__zoxide_z"]
@@ -188,6 +189,7 @@ async def check(late):
         # Reinitialization updates the callable and retains a single binding.
         exec(source, namespace)
         assert len(bindings.bindings) == 1
+        assert namespace["__zoxide_keybindings"] is handler
         document("go keyword ")
         assert (
             binding.filter()
